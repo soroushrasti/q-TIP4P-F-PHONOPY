@@ -1,0 +1,129 @@
+LAMMPS (6 Jul 2017)
+
+
+units           metal
+atom_style      full
+boundary p p p
+
+
+read_data supercell-order-022.data
+  triclinic box = (0 0 0) to (14.8736 12.8809 13.8737) with tilt (7.43681 8.6e-08 -1.5e-08)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  288 atoms
+  scanning bonds ...
+  2 = max bonds/atom
+  scanning angles ...
+  1 = max angles/atom
+  reading bonds ...
+  192 bonds
+  reading angles ...
+  96 angles
+  2 = max # of 1-2 neighbors
+  1 = max # of 1-3 neighbors
+  1 = max # of 1-4 neighbors
+  2 = max # of special neighbors
+
+
+set type 2 charge -1.1128
+  96 settings made for charge
+set type 1 charge 0.5564
+  192 settings made for charge
+
+
+pair_style lj/cut/tip4p/long 2 1 1 1 0.1546 8.5
+kspace_style pppm/tip4p 1.0e-7
+
+pair_modify table 0
+
+pair_coeff 1 1 0.0 0.0
+pair_coeff 2 2  0.008031034 3.1589
+pair_coeff 1 2 0.0 0.0
+
+
+bond_style morse
+bond_coeff 1 5.03414 2.287 0.9419
+#bond_coeff 1 2.95 2.287 0.9419
+
+angle_style harmonic
+#angle_coeff 1 3.80954 107.4
+angle_coeff 1 1.90475 107.4
+
+
+
+
+
+fix fix_nve all nve
+thermo 10000
+thermo_style custom step ebond eangle etotal ecoul epair
+
+dump 1 all custom 1 supercell-022.dump id type x y z vx vy vz fx fy fz
+#dump_modify 1 format " %d %d %.7f  %.7f %.7f %.7f %.7f %.7f %.7f %.7f %.7f"
+#dump_modify 1 sort id format float %3.15g
+dump_modify 1 sort off format float %3.15g
+
+timestep 0.00001
+run 0
+PPPM initialization ...
+  extracting TIP4P info from pair style
+WARNING: Using polynomial approximation for long-range coulomb (../kspace.cpp:321)
+  G vector (1/distance) = 0.447672
+  grid = 48 72 45
+  stencil order = 5
+  estimated absolute RMS force accuracy = 1.41981e-06
+  estimated relative force accuracy = 9.86006e-08
+  using double precision FFTs
+  3d grid and FFT values/proc = 314882 155520
+Neighbor list info ...
+  update every 1 steps, delay 10 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10.8092
+  ghost atom cutoff = 10.8092
+  binsize = 5.4046, bins = 5 3 3
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut/tip4p/long, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton/tri
+      stencil: half/bin/3d/newton/tri
+      bin: standard
+WARNING: Inconsistent image flags (../domain.cpp:786)
+Per MPI rank memory allocation (min/avg/max) = 37.63 | 37.63 | 37.63 Mbytes
+Step E_bond E_angle TotEng E_coul E_pair 
+       0    4.8941354   0.54626818   -56.647254    553.09068   -62.087658 
+Loop time of 9.53674e-07 on 1 procs for 0 steps with 288 atoms
+
+209.7% CPU use with 1 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Bond    | 0          | 0          | 0          |   0.0 |  0.00
+Kspace  | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 9.537e-07  |            |       |100.00
+
+Nlocal:    288 ave 288 max 288 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    5383 ave 5383 max 5383 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    81504 ave 81504 max 81504 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 81504
+Ave neighs/atom = 283
+Ave special neighs/atom = 2
+Neighbor list builds = 0
+Dangerous builds = 0
+
+
+
+
+
+
+
+
+Total wall time: 0:00:00

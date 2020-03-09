@@ -1,0 +1,55 @@
+
+
+units           metal
+atom_style      full
+boundary p p p
+
+
+read_data supercell.data
+
+set type 2 charge -1.1128
+set type 1 charge 0.5564
+
+
+pair_style lj/cut/tip4p/long 2 1 1 1 0.1546 10
+kspace_style pppm/tip4p 1.0e-7
+
+pair_modify table 0
+
+pair_coeff 1 1 0.0 0.0     
+pair_coeff 2 2  0.008031034 3.1589      
+pair_coeff 1 2 0.0 0.0     
+
+
+
+
+bond_style harmonic
+#bond_coeff 1 450.0 0.9572
+bond_coeff 1 19.53 0.9572  
+#bond_coeff 1 80.0 0.9572
+
+angle_style harmonic
+#angle_coeff 1 55.0 104.52
+angle_coeff 1 2.385   104.52 
+#angle_coeff 1 10.0 104.52
+
+
+fix fix_nve all nve
+thermo 10000
+thermo_style custom step ebond eangle etotal ecoul epair
+
+dump 1 all custom 1 supercell-001.dump id type x y z vx vy vz fx fy fz 
+#dump_modify 1 format " %d %d %.7f  %.7f %.7f %.7f %.7f %.7f %.7f %.7f %.7f"
+#dump_modify 1 sort id format float %3.15g
+dump_modify 1 sort off format float %3.15g
+
+timestep 0.00001
+run 0 
+
+
+
+
+
+
+
+
